@@ -1,5 +1,5 @@
 const { StatusCodes } = require('http-status-codes')
-const responseHandler = require("../format/response")
+const responseHandler = require("../formats/response")
 
 function pingProblemController(req, res) {
   return res.json({message: "Problem Controller is working! "})

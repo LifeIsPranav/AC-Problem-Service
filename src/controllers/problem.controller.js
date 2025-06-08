@@ -1,6 +1,6 @@
 const { StatusCodes } = require('http-status-codes')
 const responseHandler = require("../utils/responseHandler")
-const NotImplemented = require('../errors/notimplemented.error')
+const NotImplemented = require('../errors/serverSide/notimplemented.error')
 
 
 function pingProblemController(req, res) {

@@ -2,7 +2,7 @@ const BaseError = require("../errors/base.error");
 const responseHandler = require("./responseHandler");
 const InternalServerError = require('../errors/internalServer.error');
 
-function errorHandler(err, req, res, next) {
+function errorHandler( err, req, res, _ ) {
   
   if(!(err instanceof BaseError))
   err = new InternalServerError(err.details)

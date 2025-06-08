@@ -1,4 +1,5 @@
-const { STATUS_CODES } = require('http')
+const { STATUS_CODES } = require('http');
+const getUrl = require('../utils/getUrl');
 
 /**
  * Sends a consistent HTTP response.
@@ -41,7 +42,9 @@ function responseHandler(
     message,
     data,
     error,
-    timestamp
+    timestamp,
+    url: getUrl(request),
+    requestType: request.method
   })  
 
 }

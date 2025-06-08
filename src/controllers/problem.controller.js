@@ -1,7 +1,6 @@
 const { StatusCodes } = require('http-status-codes')
-const responseHandler = require("../formats/response.format")
+const responseHandler = require("../utils/responseHandler")
 const NotImplemented = require('../errors/notimplemented.error')
-const BadRequest = require('../errors/badrequest.error')
 
 
 function pingProblemController(req, res) {
@@ -11,7 +10,7 @@ function pingProblemController(req, res) {
 
 async function addProblem(req, res, next) {
   try {
-    throw new BadRequest("prob", "sb kuch do yaar!")
+    throw new NotImplemented(req)
   } catch (error) {
     next(error)
   }

@@ -1,5 +1,5 @@
 const { STATUS_CODES } = require('http');
-const getUrl = require('../utils/getUrl');
+const getUrl = require('./getUrl');
 
 /**
  * Sends a consistent HTTP response.

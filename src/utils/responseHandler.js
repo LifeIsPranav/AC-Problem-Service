@@ -1,4 +1,5 @@
-const { STATUS_CODES } = require('http')
+const { STATUS_CODES } = require('http');
+const getUrl = require('./getUrl');
 
 /**
  * Sends a consistent HTTP response.
@@ -25,7 +26,7 @@ function responseHandler(
   
   ) {
 
-  if(!response) return false
+  if(!response) return null
 
   success = typeof success === 'boolean' ? success : statusCode < 400
   message = message || STATUS_CODES[statusCode] || 'Unknown Status';
@@ -35,16 +36,16 @@ function responseHandler(
     .replace('T', ' ')
     .replace('Z', '')
 
-  response.status(statusCode).json({
+  console.log(`[${timestamp}] [${request.route.stack[0].name}] [Response Sent]`)
+  return response.status(statusCode).json({
     success,
     message,
     data,
     error,
-    timestamp
-  })
-  
-  console.log(`[${timestamp}] [${request.route.stack[0].name}] [Response Sent]`)
-  return true
+    timestamp,
+    url: getUrl(request),
+    requestType: request.method
+  })  
 
 }
 

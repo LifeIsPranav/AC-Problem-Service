@@ -3,6 +3,7 @@ const express = require('express')
 
 const apiRouter = require('./routes')
 const { PORT } = require('./config/server.config')
+const errorHandler = require('./utils/errorHandler')
 
 
 const app = express()
@@ -18,6 +19,9 @@ app.get('/ping', (req, res) => {
     message: "Problem Service is Alive!"
   })
 })
+
+app.use(errorHandler)
+
 
 app.listen(PORT, () => {
   console.log(`Server Started at http://localhost:${PORT}/`);

@@ -1,6 +1,6 @@
 const BaseError = require("../errors/base.error");
 const responseHandler = require("./responseHandler");
-const InternalServerError = require('../errors/internalServer.error');
+const InternalServerError = require('../errors/serverSide/internalServer.error');
 
 function errorHandler( err, req, res, _ ) {
   

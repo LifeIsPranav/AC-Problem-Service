@@ -2,31 +2,32 @@ const { StatusCodes } = require('http-status-codes')
 const responseHandler = require("../formats/response")
 
 function pingProblemController(req, res) {
-  return res.json({message: "Problem Controller is working! "})
+  responseHandler(req, res, StatusCodes.OK, "Pinged Problem Check Controller!")
 }
 
+
 async function addProblem(req, res) {
-  responseHandler(res, StatusCodes.NOT_IMPLEMENTED)
+  responseHandler(req, res, StatusCodes.NOT_IMPLEMENTED)
 }
 
 
 async function getProblem(req, res) {
-  responseHandler(res, StatusCodes.NOT_IMPLEMENTED)
+  responseHandler(req, res, StatusCodes.NOT_IMPLEMENTED)
 }
 
 
 async function getProblems(req, res) {
-  responseHandler(res, StatusCodes.NOT_IMPLEMENTED)
+  responseHandler(req, res, StatusCodes.NOT_IMPLEMENTED)
 }
 
 
 async function deleteProblem(req, res) {
-  responseHandler(res, StatusCodes.NOT_IMPLEMENTED)
+  responseHandler(req, res, StatusCodes.NOT_IMPLEMENTED)
 }
 
 
 async function updateProblem(req, res) {
-  responseHandler(res, StatusCodes.NOT_IMPLEMENTED)
+  responseHandler(req, res, StatusCodes.NOT_IMPLEMENTED)
 }
 
 

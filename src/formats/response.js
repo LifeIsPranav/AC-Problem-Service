@@ -3,6 +3,7 @@ const { STATUS_CODES } = require('http')
 /**
  * Sends a consistent HTTP response.
  *
+ * @param {RequestObject} request - Express.js response object.
  * @param {ResponseObject} response - Express.js response object.
  * @param {Number} [statusCode=200] - HTTP status code.
  * @param {String} [message=''] - Message to include in the response.
@@ -14,12 +15,13 @@ const { STATUS_CODES } = require('http')
 
 function responseHandler(
 
+  request,
   response, 
   statusCode = 200, 
   message = '', 
   data = null, 
   error = null,
-  success = null
+  success = null,
   
   ) {
 
@@ -27,16 +29,21 @@ function responseHandler(
 
   success = typeof success === 'boolean' ? success : statusCode < 400
   message = message || STATUS_CODES[statusCode] || 'Unknown Status';
+  
+  const timestamp = new Date()
+    .toISOString()
+    .replace('T', ' ')
+    .replace('Z', '')
 
-  console.log("Response Sent!")
   response.status(statusCode).json({
     success,
     message,
     data,
     error,
-    timestamp: new Date().toISOString()
+    timestamp
   })
-
+  
+  console.log(`[${timestamp}] [${request.route.stack[0].name}] [Response Sent]`)
   return true
 
 }

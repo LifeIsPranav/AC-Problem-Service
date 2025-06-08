@@ -1,6 +1,14 @@
 const { StatusCodes } = require('http-status-codes')
 const responseHandler = require("../utils/responseHandler")
 const NotImplemented = require('../errors/serverSide/notimplemented.error')
+const PaymentRequired = require('../errors/clientSide/paymentRequired.error')
+const NotFound = require('../errors/clientSide/notFound.error')
+const Unauthorized = require('../errors/clientSide/unauthorized.error')
+const MethodNotAllowed = require('../errors/clientSide/methodNotAllowed.error')
+const InternalServerError = require('../errors/serverSide/internalServer.error')
+const BadRequest = require('../errors/clientSide/badRequest.error')
+const Forbidden = require('../errors/clientSide/forbidden.error')
+const BadGateway = require('../errors/serverSide/badGateway.error')
 
 
 function pingProblemController(req, res) {
@@ -10,7 +18,7 @@ function pingProblemController(req, res) {
 
 async function addProblem(req, res, next) {
   try {
-    throw new NotImplemented(req)
+    throw new MethodNotAllowed(req)
   } catch (error) {
     next(error)
   }

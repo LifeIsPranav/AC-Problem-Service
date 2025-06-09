@@ -66,7 +66,7 @@ async function deleteProblem(req, res) {
   try {
     const problemId = req.params.id
     if(!problemId) throw new BadRequest("Problem Id", "Please Provide Adequate Problem Id")
-      
+
     const problem = await problemService.deleteProblem(problemId)
     if(!problem) throw new NotFound()
 
@@ -81,9 +81,20 @@ async function deleteProblem(req, res) {
 
 async function updateProblem(req, res) {
 
-  const problemId = req.params.id
-  const details = req.body
+  try {
+    const problemId = req.params.id
+    const details = req.body
 
+    if(!details) throw new BadRequest("Details", "Kindly Provide Details to Be Updated")
+    if(!problemId) throw new BadRequest("Problem Id", "Please Provide Adequate Problem Id")
+
+    const updatedProblem = await problemService.updateProblem(problemId, details)
+    console.log("Problem Updated Successfully!")
+    responseHandler(req, res, StatusCodes.OK, "Problem Updated Successfully", updateProblem)
+    
+  } catch (error) {
+    throw error
+  }
 }
 
 

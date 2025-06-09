@@ -42,12 +42,25 @@ class ProblemService {
     }
   }
 
+
   async deleteProblem(id) {
     try {
       const problem = await this.problemRepository.deleteProblem(id)
       if(!problem) throw new NotFound()
 
       return problem
+
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async updateProblem(id, details) {
+    try {
+      const updatedProblem = await this.problemRepository.updateProblem(id, details)
+      if(!updatedProblem) throw new NotFound()
+
+      return updatedProblem
 
     } catch (error) {
       throw error

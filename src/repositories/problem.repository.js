@@ -39,7 +39,7 @@ class ProblemRepository {
   async getProblem(id) {
     try {
       return await Problem.findById(id)
-      
+
     } catch (error) {
       throw error
     }
@@ -49,6 +49,25 @@ class ProblemRepository {
   async deleteProblem(id) {
     try {
       return await Problem.findByIdAndDelete(id)
+
+    } catch (error) {
+      throw error
+    }
+  }
+
+
+  async updateProblem(id, details) {
+    try {
+      const updatedProblem = await Problem.findByIdAndUpdate(id, {
+        ...(details.title && { title: details.title }),
+        ...(details.description && { description: details.description }),
+        ...(details.difficulty && { difficulty: details.difficulty }),
+        ...(details.testCases && { testCases: details.testCases }),
+        ...(details.editorial && { editorial: details.editorial })
+      },
+      {new: true, runValidators: true})
+
+      return updatedProblem
 
     } catch (error) {
       throw error

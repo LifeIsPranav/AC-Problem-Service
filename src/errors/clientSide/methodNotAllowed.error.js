@@ -1,5 +1,5 @@
-const getUrl = require("../../utils/getUrl");
 const BaseError = require("../base.error");
+const { getUrl } = require("../../utils");
 const { StatusCodes } = require('http-status-codes')
 
 class MethodNotAllowed extends BaseError {

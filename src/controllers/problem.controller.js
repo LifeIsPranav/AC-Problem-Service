@@ -1,39 +1,100 @@
-const { StatusCodes } = require('http-status-codes')
 const responseHandler = require("../utils/responseHandler")
-const NotImplemented = require('../errors/serverSide/notimplemented.error')
+const NotFound = require('../errors/clientSide/notFound.error')
 
+const { ProblemService } = require('../services')
+const { StatusCodes } = require('http-status-codes')
+const { ProblemRepository } = require('../repositories')
+const BadRequest = require("../errors/clientSide/badRequest.error")
+
+
+const problemService = new ProblemService(new ProblemRepository())
 
 function pingProblemController(req, res) {
   responseHandler(req, res, StatusCodes.OK, "Pinged Problem Check Controller!")
 }
 
 
-async function addProblem(req, res, next) {
+async function addProblem(req, res) {
   try {
-    throw new NotImplemented(req)
+    const problemData = req.body
+    const problem = await problemService.createProblem(problemData)
+
+    console.log("New Problem Created")
+    responseHandler(req, res, StatusCodes.CREATED, "New Problem Created Successfully", problem)
+
   } catch (error) {
-    next(error)
+    throw error
   }
 }
 
 
 async function getProblem(req, res) {
-  responseHandler(req, res, StatusCodes.NOT_IMPLEMENTED)
+  try {
+    const problemId = req.params.id
+    const problem = await problemService.getProblem(problemId)
+
+    if(!problemId) throw new NotFound()
+    responseHandler(req, res, StatusCodes.OK, "Problem Fetched Successfully", problem)
+
+  } catch (error) {
+    throw error
+  }
+
 }
 
 
 async function getProblems(req, res) {
-  responseHandler(req, res, StatusCodes.NOT_IMPLEMENTED)
+  try {
+    const problems = await problemService.getAllProblems()
+
+    console.log("All problems Fetched Successfully")
+    const data = {
+      totalProblems : problems.length,
+      problems
+    }
+
+    responseHandler(req, res, 200, "All problems Fetched Successfully", data)
+    
+  } catch (error) {
+    throw error
+  }
 }
 
 
 async function deleteProblem(req, res) {
-  responseHandler(req, res, StatusCodes.NOT_IMPLEMENTED)
+  
+  try {
+    const problemId = req.params.id
+    if(!problemId) throw new BadRequest("Problem Id", "Please Provide Adequate Problem Id")
+
+    const problem = await problemService.deleteProblem(problemId)
+    if(!problem) throw new NotFound()
+
+    console.log("Problem Deleted Successfully")
+    responseHandler(req, res, StatusCodes.OK, "Problem Deleted Successfully", problem)
+
+  } catch (error) {
+    throw error
+  }
 }
 
 
 async function updateProblem(req, res) {
-  responseHandler(req, res, StatusCodes.NOT_IMPLEMENTED)
+
+  try {
+    const problemId = req.params.id
+    const details = req.body
+
+    if(!details) throw new BadRequest("Details", "Kindly Provide Details to Be Updated")
+    if(!problemId) throw new BadRequest("Problem Id", "Please Provide Adequate Problem Id")
+
+    const updatedProblem = await problemService.updateProblem(problemId, details)
+    console.log("Problem Updated Successfully!")
+    responseHandler(req, res, StatusCodes.OK, "Problem Updated Successfully", updateProblem)
+    
+  } catch (error) {
+    throw error
+  }
 }
 
 

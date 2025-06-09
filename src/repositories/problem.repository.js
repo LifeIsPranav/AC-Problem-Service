@@ -26,7 +26,7 @@ class ProblemRepository {
   }
 
 
-  async getProblems() {
+  async getAllProblems() {
     try {
       const problems = await Problem.find({})
       return problems

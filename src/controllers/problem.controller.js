@@ -33,7 +33,7 @@ async function getProblem(req, res) {
 
 async function getProblems(req, res) {
   try {
-    const problems = await problemService.getProblems()
+    const problems = await problemService.getAllProblems()
 
     console.log("All problems Fetched Successfully")
     const data = {

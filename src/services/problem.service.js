@@ -21,9 +21,9 @@ class ProblemService {
   }
 
 
-  async getProblems() {
+  async getAllProblems() {
     try {
-      return await this.problemRepository.getProblems()
+      return await this.problemRepository.getAllProblems()
     } catch (error) {
       throw error
     }

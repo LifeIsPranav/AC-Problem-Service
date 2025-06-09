@@ -41,6 +41,7 @@ async function getProblems(req, res) {
       problems
     }
     responseHandler(req, res, 200, "All problems Fetched Successfully", data)
+    
   } catch (error) {
     throw error
   }

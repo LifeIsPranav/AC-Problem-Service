@@ -1,7 +1,11 @@
 const { StatusCodes } = require('http-status-codes')
 const responseHandler = require("../utils/responseHandler")
-const NotImplemented = require('../errors/serverSide/notimplemented.error')
+const NotImplemented = require('../errors/serverSide/notImplemented.error')
+const { ProblemService } = require('../services')
+const { ProblemRepository } = require('../repositories')
 
+
+const problemService = new ProblemService(new ProblemRepository())
 
 function pingProblemController(req, res) {
   responseHandler(req, res, StatusCodes.OK, "Pinged Problem Check Controller!")
@@ -10,7 +14,12 @@ function pingProblemController(req, res) {
 
 async function addProblem(req, res, next) {
   try {
-    throw new NotImplemented(req)
+    const problemData = req.body
+    const problem = await problemService.createProblem(problemData)
+
+    console.log("New Problem Created")
+    responseHandler(req, res, StatusCodes.CREATED, "New Problem Created Successfully", problem)
+
   } catch (error) {
     next(error)
   }

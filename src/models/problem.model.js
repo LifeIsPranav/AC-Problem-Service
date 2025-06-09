@@ -29,8 +29,7 @@ const problemSchema = new mongoose.Schema({
         type: String,
         required: true
       },
-    }],
-    required: true
+    }]
   },
 
   editorial: {

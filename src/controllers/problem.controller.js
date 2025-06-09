@@ -1,6 +1,5 @@
 const { StatusCodes } = require('http-status-codes')
 const responseHandler = require("../utils/responseHandler")
-const NotImplemented = require('../errors/serverSide/notImplemented.error')
 const { ProblemService } = require('../services')
 const { ProblemRepository } = require('../repositories')
 const NotFound = require('../errors/clientSide/notFound.error')
@@ -61,7 +60,18 @@ async function getProblems(req, res) {
 
 
 async function deleteProblem(req, res) {
-  responseHandler(req, res, StatusCodes.NOT_IMPLEMENTED)
+  const problemId = req.params.id
+
+  try {
+    const problem = await problemService.deleteProblem(problemId)
+    if(!problem) throw new NotFound()
+
+    console.log("Problem Deleted Successfully")
+    responseHandler(req, res, StatusCodes.OK, "Problem Deleted Successfully", problem)
+
+  } catch (error) {
+    throw error
+  }
 }
 
 

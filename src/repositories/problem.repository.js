@@ -31,7 +31,7 @@ class ProblemRepository {
       return await Problem.find({})
 
     } catch (error) {
-      throw(error)
+      throw error
     }
   }
 
@@ -39,8 +39,19 @@ class ProblemRepository {
   async getProblem(id) {
     try {
       return await Problem.findById(id)
-    } catch (error) {
       
+    } catch (error) {
+      throw error
+    }
+  }
+
+
+  async deleteProblem(id) {
+    try {
+      return await Problem.findByIdAndDelete(id)
+
+    } catch (error) {
+      throw error
     }
   }
 

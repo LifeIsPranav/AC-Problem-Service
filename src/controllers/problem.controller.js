@@ -4,6 +4,7 @@ const NotFound = require('../errors/clientSide/notFound.error')
 const { ProblemService } = require('../services')
 const { StatusCodes } = require('http-status-codes')
 const { ProblemRepository } = require('../repositories')
+const BadRequest = require("../errors/clientSide/badRequest.error")
 
 
 const problemService = new ProblemService(new ProblemRepository())
@@ -61,9 +62,11 @@ async function getProblems(req, res) {
 
 
 async function deleteProblem(req, res) {
-  const problemId = req.params.id
-
+  
   try {
+    const problemId = req.params.id
+    if(!problemId) throw new BadRequest("Problem Id", "Please Provide Adequate Problem Id")
+      
     const problem = await problemService.deleteProblem(problemId)
     if(!problem) throw new NotFound()
 
@@ -77,7 +80,10 @@ async function deleteProblem(req, res) {
 
 
 async function updateProblem(req, res) {
-  responseHandler(req, res, StatusCodes.NOT_IMPLEMENTED)
+
+  const problemId = req.params.id
+  const details = req.body
+
 }
 
 

@@ -35,6 +35,15 @@ class ProblemRepository {
     }
   }
 
+
+  async getProblem(id) {
+    try {
+      return await Problem.findById(id)
+    } catch (error) {
+      
+    }
+  }
+
 }
 
 

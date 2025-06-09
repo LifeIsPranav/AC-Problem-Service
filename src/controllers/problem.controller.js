@@ -3,6 +3,7 @@ const responseHandler = require("../utils/responseHandler")
 const NotImplemented = require('../errors/serverSide/notImplemented.error')
 const { ProblemService } = require('../services')
 const { ProblemRepository } = require('../repositories')
+const NotFound = require('../errors/clientSide/notFound.error')
 
 
 const problemService = new ProblemService(new ProblemRepository())
@@ -27,7 +28,17 @@ async function addProblem(req, res) {
 
 
 async function getProblem(req, res) {
-  responseHandler(req, res, StatusCodes.NOT_IMPLEMENTED)
+  try {
+    const problemId = req.params.id
+    const problem = await problemService.getProblem(problemId)
+
+    if(!problemId) throw new NotFound()
+    responseHandler(req, res, StatusCodes.OK, "Problem Fetched Successfully", problem)
+
+  } catch (error) {
+    throw error
+  }
+
 }
 
 

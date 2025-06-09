@@ -1,4 +1,5 @@
 const BadRequest = require("../errors/clientSide/badRequest.error")
+const NotFound = require("../errors/clientSide/notFound.error")
 const { markdownSanitizer } = require("../utils")
 
 class ProblemService {
@@ -28,6 +29,19 @@ class ProblemService {
       throw error
     }
   }
+
+
+  async getProblem(id) {
+    try {
+      const problem = await this.problemRepository.getProblem(id)
+      if(!problem) throw new NotFound()
+      return problem
+
+    } catch (error) {
+      throw error
+    }
+  }
+
 }
 
 

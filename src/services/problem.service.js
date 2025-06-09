@@ -1,3 +1,4 @@
+const logger = require("../config/logger.config")
 const BadRequest = require("../errors/clientSide/badRequest.error")
 const NotFound = require("../errors/clientSide/notFound.error")
 const { markdownSanitizer } = require("../utils")
@@ -51,6 +52,7 @@ class ProblemService {
       return problem
 
     } catch (error) {
+      logger.error("Problem Not Found")
       throw error
     }
   }

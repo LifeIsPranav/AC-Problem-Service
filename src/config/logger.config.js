@@ -1,5 +1,12 @@
+const path = require('path')
 const winston = require('winston')
+require('winston-mongodb')
 
+const { LOG_DB_URL } = require('./server.config')
+
+
+const currentDir = __dirname
+const rootDir = path.resolve(currentDir, '../..')
 
 const allowedTransports = []
 allowedTransports.push(new winston.transports.Console({
@@ -10,9 +17,18 @@ allowedTransports.push(new winston.transports.Console({
     }),
     winston.format.printf((log) => 
       `${log.timestamp} [${log.level}]: ${log.message}`
-    ),
-    // winston.format.simple(),
+    )
   )
+}))
+
+allowedTransports.push(new winston.transports.MongoDB({
+  level: 'error',
+  db: LOG_DB_URL,
+  collection: 'logs'
+}))
+
+allowedTransports.push(new winston.transports.File({
+  filename: `${rootDir}/logs/app.log`
 }))
 
 const logger = winston.createLogger({

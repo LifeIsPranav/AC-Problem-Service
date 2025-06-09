@@ -1,9 +1,9 @@
 const express = require('express')
 
-
-const apiRouter = require('./routes')
 const { PORT } = require('./config/server.config')
+const apiRouter = require('./routes')
 const errorHandler = require('./utils/errorHandler')
+const connectDB = require('./config/db.config')
 
 
 const app = express()
@@ -23,6 +23,7 @@ app.get('/ping', (req, res) => {
 app.use(errorHandler)
 
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Server Started at http://localhost:${PORT}/`);
+  await connectDB()
 })

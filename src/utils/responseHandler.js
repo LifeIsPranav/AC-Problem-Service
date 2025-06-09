@@ -36,7 +36,11 @@ function responseHandler(
     .replace('T', ' ')
     .replace('Z', '')
 
-  console.log(`[${timestamp}] [${request.route.stack[0].name}] [Response Sent]`)
+    
+  let logMsg = 'Response Sent'
+  if(error) logMsg = 'Error Sent' 
+  console.log(`[${timestamp}] [${request.route.stack[0].name}] [${logMsg}]`)
+
   return response.status(statusCode).json({
     success,
     message,

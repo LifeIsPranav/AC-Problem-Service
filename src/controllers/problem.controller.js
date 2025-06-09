@@ -29,7 +29,7 @@ async function addProblem(req, res) {
 
 async function getProblem(req, res) {
   try {
-    const problemId = req.params.id
+    const problemId = req.params
     const problem = await problemService.getProblem(problemId)
 
     if(!problemId) throw new NotFound()

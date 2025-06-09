@@ -12,7 +12,7 @@ function pingProblemController(req, res) {
 }
 
 
-async function addProblem(req, res, next) {
+async function addProblem(req, res) {
   try {
     const problemData = req.body
     const problem = await problemService.createProblem(problemData)
@@ -21,7 +21,7 @@ async function addProblem(req, res, next) {
     responseHandler(req, res, StatusCodes.CREATED, "New Problem Created Successfully", problem)
 
   } catch (error) {
-    next(error)
+    throw error
   }
 }
 
@@ -40,6 +40,7 @@ async function getProblems(req, res) {
       totalProblems : problems.length,
       problems
     }
+
     responseHandler(req, res, 200, "All problems Fetched Successfully", data)
     
   } catch (error) {

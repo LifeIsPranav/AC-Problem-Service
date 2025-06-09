@@ -32,7 +32,18 @@ async function getProblem(req, res) {
 
 
 async function getProblems(req, res) {
-  responseHandler(req, res, StatusCodes.NOT_IMPLEMENTED)
+  try {
+    const problems = await problemService.getProblems()
+
+    console.log("All problems Fetched Successfully")
+    const data = {
+      totalProblems : problems.length,
+      problems
+    }
+    responseHandler(req, res, 200, "All problems Fetched Successfully", data)
+  } catch (error) {
+    throw error
+  }
 }
 
 

@@ -19,6 +19,15 @@ class ProblemService {
       throw error
     }
   }
+
+
+  async getProblems() {
+    try {
+      return await this.problemRepository.getProblems()
+    } catch (error) {
+      throw error
+    }
+  }
 }
 
 

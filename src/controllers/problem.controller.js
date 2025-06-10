@@ -19,7 +19,6 @@ async function addProblem(req, res) {
     const problemData = req.body
     const problem = await problemService.createProblem(problemData)
 
-    console.log("New Problem Created")
     responseHandler(req, res, StatusCodes.CREATED, "New Problem Created Successfully", problem)
 
   } catch (error) {
@@ -47,7 +46,6 @@ async function getProblems(req, res) {
   try {
     const problems = await problemService.getAllProblems()
 
-    console.log("All problems Fetched Successfully")
     const data = {
       totalProblems : problems.length,
       problems
@@ -70,7 +68,6 @@ async function deleteProblem(req, res) {
     const problem = await problemService.deleteProblem(problemId)
     if(!problem) throw new NotFound()
 
-    console.log("Problem Deleted Successfully")
     responseHandler(req, res, StatusCodes.OK, "Problem Deleted Successfully", problem)
 
   } catch (error) {
@@ -89,7 +86,6 @@ async function updateProblem(req, res) {
     if(!problemId) throw new BadRequest("Problem Id", "Please Provide Adequate Problem Id")
 
     const updatedProblem = await problemService.updateProblem(problemId, details)
-    console.log("Problem Updated Successfully!")
     responseHandler(req, res, StatusCodes.OK, "Problem Updated Successfully", updateProblem)
     
   } catch (error) {

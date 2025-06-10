@@ -5,7 +5,6 @@ const { markdownSanitizer } = require("../utils")
 const logEvent = require("../utils/logger.utils")
 
 const logLevel = 'service'
-
 class ProblemService {
 
   constructor(problemRepository) {
@@ -13,31 +12,36 @@ class ProblemService {
   }
 
   async createProblem(problemData) {
+    const context = 'createProblem'
     try {
-      logEvent("info", "Creating New Problem", "createProblem", logLevel)
+      logEvent("info", "Creating New Problem", context, logLevel)
 
       if(!problemData.description) {
-        logEvent("warn", "Missing Description", "createProblem", logLevel)
+        logEvent("warn", "Missing Description", context, logLevel)
         throw new BadRequest("description", "Please Provide a Description to the Problem")
       }
 
       problemData.description = markdownSanitizer(problemData.description)
       const problem = await this.problemRepository.createProblem(problemData)
       
-      logEvent("info", "Created Successfully", "createProblem", logLevel, { problemId: problem._id })
+      logEvent("info", "Created Successfully", context, logLevel, { problemId: problem._id })
       return problem
 
     } catch (error) {
-      logEvent('error', 'Problem Creation Failed', 'createProblem', 'service', {attemptedData: problemData}, error)
+      logEvent('error', 'Problem Creation Failed', context, logLevel, {attemptedData: problemData}, error)
       throw error
     }
   }
 
 
   async getAllProblems() {
+    const context = 'getAllProblems'
     try {
+      logEvent("info", "Fetching All Problems", context, logLevel)
+
       return await this.problemRepository.getAllProblems()
     } catch (error) {
+      logEvent('error', 'Fetching Problems Failed', context, logLevel, {}, error)
       throw error
     }
   }

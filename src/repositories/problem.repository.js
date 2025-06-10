@@ -4,19 +4,20 @@ const BadRequest = require("../errors/clientSide/badRequest.error");
 const { Problem } = require("../models");
 const logEvent = require("../utils/logger.utils");
 
-
+const logLevel = 'repository'
 class ProblemRepository {
 
   async createProblem(problemData) {
+    const context = 'createProblem'
     try {
-      logEvent('debug', 'Starting problem creation in Repository', "createProblem", "repository", problemData)
+      logEvent('debug', 'Starting problem creation in Repository', context, logLevel, problemData)
 
       if(!problemData.title) {
-        logEvent('warn', 'Title Not provided', 'createProblem', 'repository')
+        logEvent('warn', 'Title Not provided', context, logLevel)
         throw new BadRequest("Title", "Provide a Title")
       }
       if(!problemData.description) {
-        logEvent('warn', 'Description Not provided', 'createProblem', 'repository')
+        logEvent('warn', 'Description Not provided', context, logLevel)
         throw new BadRequest("Description", "Provide a Description")
       }
 
@@ -28,21 +29,27 @@ class ProblemRepository {
         editorial: problemData.editorial ?? undefined
       })
 
-      logEvent('debug', 'Problem created in Repository', "createProblem", "repository", problemData)
+      logEvent('debug', 'Problem created in Repository', context, logLevel, problemData)
       return problem
 
     } catch(error) {
-      logEvent('error', 'Problem Creation Failed', 'createProblem', 'repository', {attemptedData: problemData}, error)
+      logEvent('error', 'Problem Creation Failed', context, logLevel, {attemptedData: problemData}, error)
       throw error
     }
   }
 
 
   async getAllProblems() {
+    const context = 'getAllProblems'
     try {
-      return await Problem.find({})
+      logEvent('debug', 'Starting to Fetch All Problems in Repository', context, logLevel)
+      const problems = await Problem.find({})
+
+      logEvent('debug', 'Fetched All Problems Successfully', context, logLevel)
+      return problems
 
     } catch (error) {
+      logEvent('error', 'Problem Fetching Failed', context, logLevel)
       throw error
     }
   }

@@ -1,5 +1,8 @@
+
+const logger = require("../config/logger.config");
 const BadRequest = require("../errors/clientSide/badRequest.error");
 const { Problem } = require("../models");
+const logEvent = require("../utils/logger.utils");
 
 
 class ProblemRepository {
@@ -7,8 +10,16 @@ class ProblemRepository {
   async createProblem(problemData) {
     try {
 
-      if(!problemData.title) throw new BadRequest("Title", "Provide a Title")
-      if(!problemData.description) throw new BadRequest("Description", "Provide a Description")
+      logEvent('debug', 'Starting problem creation in Repository', "createProblem", "repository", problemData)
+
+      if(!problemData.title) {
+        logEvent('warn', 'Title Not provided', 'createProblem', 'repository')
+        throw new BadRequest("Title", "Provide a Title")
+      }
+      if(!problemData.description) {
+        logEvent('warn', 'Description Not provided', 'createProblem', 'repository')
+        throw new BadRequest("Description", "Provide a Description")
+      }
 
       const problem = await Problem.create({
         title: problemData.title,
@@ -17,7 +28,8 @@ class ProblemRepository {
         testCases: (problemData.testCases) ? problemData.testCases : [],
         editorial: problemData.editorial ?? undefined
       })
-      
+
+      logEvent('debug', 'Problem created in Repository', "createProblem", "repository", problemData)
       return problem
 
     } catch(error) {

@@ -2,6 +2,7 @@ const logger = require("../config/logger.config")
 const BadRequest = require("../errors/clientSide/badRequest.error")
 const NotFound = require("../errors/clientSide/notFound.error")
 const { markdownSanitizer } = require("../utils")
+const logEvent = require("../utils/logger.utils")
 
 class ProblemService {
 
@@ -11,10 +12,18 @@ class ProblemService {
 
   async createProblem(problemData) {
     try {
-      if(!problemData.description) throw new BadRequest("description", "Please Provide a Description to the Problem")
+
+      logEvent("info", "Creating New Problem", "createProblem", "service")
+
+      if(!problemData.description) {
+        logEvent("warn", "Missing Description", "createProblem", "service")
+        throw new BadRequest("description", "Please Provide a Description to the Problem")
+      }
 
       problemData.description = markdownSanitizer(problemData.description)
       const problem = await this.problemRepository.createProblem(problemData)
+      
+      logEvent("info", "Created Successfully", "createProblem", "service", { problemId: problem._id })
       return problem
 
     } catch (error) {
@@ -47,12 +56,13 @@ class ProblemService {
   async deleteProblem(id) {
     try {
       const problem = await this.problemRepository.deleteProblem(id)
-      if(!problem) throw new NotFound()
+      if(!problem) {
+        throw new NotFound()
+      }
 
       return problem
 
     } catch (error) {
-      logger.error("Problem Not Found")
       throw error
     }
   }

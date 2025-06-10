@@ -12,6 +12,7 @@ const allowedTransports = []
 
 // Adding Console to Logger
 allowedTransports.push(new winston.transports.Console({
+  level: 'debug',
   format: winston.format.combine (
     winston.format.colorize(),
     winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
@@ -20,16 +21,11 @@ allowedTransports.push(new winston.transports.Console({
       const metadata = log[Symbol.for('splat')] || []
       const additionalData = metadata.length ? metadata[0] : {}
       
-      // Format the additional data as JSON string
-      const additionalInfo = Object.keys(additionalData).length > 0 
-        ? JSON.stringify(additionalData)
-        : ''
-      
       // Use logger properties for operation and context
       const operation = logger.operation || 'unknown'
       const context = logger.context || 'unknown'
       
-      return `${log.timestamp} [${log.level}] [${context}] [${operation}]: ${log.message} ${additionalInfo}`
+      return `${log.timestamp} [${log.level}] [${context}] [${operation}]: ${log.message}`
     })
   ),
   handleExceptions: true
@@ -50,6 +46,7 @@ allowedTransports.push(new winston.transports.MongoDB({
 // Adding File to Logger
 allowedTransports.push(new winston.transports.File({
   filename: `${rootDir}/logs/app.log`,
+  level: 'debug',
   format: winston.format.combine(
     winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
     winston.format.printf((log) => {
@@ -66,7 +63,7 @@ allowedTransports.push(new winston.transports.File({
       const operation = logger.operation || 'unknown'
       const context = logger.context || 'unknown'
       
-      return `${log.timestamp} [${log.level.toUpperCase()}] [${context}] [${operation}]: ${log.message} ${additionalInfo}`
+      return `${log.timestamp} [${log.level.toUpperCase()}] [${context}] [${operation}]: ${log.message} :: ${additionalInfo}`
     })
   ),
   handleExceptions: true
@@ -84,15 +81,6 @@ const logger = winston.createLogger({
   transports: allowedTransports
 })
 
-
-logger.errorWithStack = (message, error) => {
-  logger.error(message, { 
-    stack: error.stack,
-    error: error.message,
-    name: error.name,
-    ...(error.details ? { details: error.details } : {})
-  })
-}
 
 process.on('unhandledRejection', (error) => {
   logger.error('Unhandled Rejection at:', error.stack || error);

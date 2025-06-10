@@ -1,4 +1,3 @@
-const logger = require("../config/logger.config")
 const BadRequest = require("../errors/clientSide/badRequest.error")
 const NotFound = require("../errors/clientSide/notFound.error")
 const { markdownSanitizer } = require("../utils")
@@ -73,20 +72,27 @@ class ProblemService {
 
 
   async deleteProblem(id) {
+    const operation = 'deleteProblem'
     try {
+      logInfo('Deleting Problem', operation, context)
       const problem = await this.problemRepository.deleteProblem(id)
+
       if(!problem) {
+        logWarn('Problem Data Empty: No Such Problem Found', operation, context, {problemId: problem})
         throw new NotFound()
       }
 
+      logInfo('Problem Deleted Successfully', operation, context)
       return problem
 
     } catch (error) {
+      logError(error, 'Error Deleting Problem', operation, context, {problemId: id})
       throw error
     }
   }
 
   async updateProblem(id, details) {
+    const operation = 'updateProblem'
     try {
       const updatedProblem = await this.problemRepository.updateProblem(id, details)
       if(!updatedProblem) throw new NotFound()

@@ -73,16 +73,23 @@ class ProblemRepository {
 
 
   async deleteProblem(id) {
+    const operation = 'deleteProblem'
     try {
-      return await Problem.findByIdAndDelete(id)
+      logDebug('Deleting Problem from the DB', operation, context)
+      const problem = await Problem.findByIdAndDelete(id)
+
+      logDebug('Operation Performed on DB Successfully', operation, context, {data: problem})
+      return problem
 
     } catch (error) {
+      logError(error, 'Error Deleting Problem from DB', operation, context, {problemId: id})
       throw error
     }
   }
 
 
   async updateProblem(id, details) {
+    const operation = 'updateProblem'
     try {
       const updatedProblem = await Problem.findByIdAndUpdate(id, {
         ...(details.title && { title: details.title }),

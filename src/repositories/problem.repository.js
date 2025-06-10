@@ -2,7 +2,7 @@
 const logger = require("../config/logger.config");
 const BadRequest = require("../errors/clientSide/badRequest.error");
 const { Problem } = require("../models");
-const logEvent = require("../utils/logger.utils");
+const { logEvent, logError } = require("../utils/logger.utils");
 
 const { repository: context } = require('../config/context.config')
 
@@ -34,7 +34,7 @@ class ProblemRepository {
       return problem
 
     } catch(error) {
-      logEvent('error', 'Problem Creation Failed', operation, context, {attemptedData: problemData}, error)
+      logError(error, 'Problem Creation Failed', operation, context, {attemptedData: problemData})
       throw error
     }
   }
@@ -50,7 +50,7 @@ class ProblemRepository {
       return problems
 
     } catch (error) {
-      logEvent('error', 'Problem Fetching Failed', operation, context, {}, error)
+      logError(error, 'Problem Fetching Failed', operation, context)
       throw error
     }
   }

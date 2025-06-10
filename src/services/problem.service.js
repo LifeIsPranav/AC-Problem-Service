@@ -2,7 +2,7 @@ const logger = require("../config/logger.config")
 const BadRequest = require("../errors/clientSide/badRequest.error")
 const NotFound = require("../errors/clientSide/notFound.error")
 const { markdownSanitizer } = require("../utils")
-const logEvent = require("../utils/logger.utils")
+const { logEvent, logError } = require("../utils/logger.utils")
 const { service: context } = require('../config/context.config')
 
 
@@ -29,7 +29,7 @@ class ProblemService {
       return problem
 
     } catch (error) {
-      logEvent('error', 'Problem Creation Failed', operation, context, {attemptedData: problemData}, error)
+      logError(error, 'Problem Creation Failed', operation, context, {attemptedData: problemData})
       throw error
     }
   }
@@ -40,12 +40,12 @@ class ProblemService {
     try {
       logEvent("info", "Fetching All Problems", operation, context)
       const problems =  await this.problemRepository.getAllProblems()
-      
+
       logEvent("info", "Fetched All Problems", operation, context)
       return problems
 
     } catch (error) {
-      logEvent('error', 'Fetching Problems Failed', operation, context, {}, error)
+      logError(error, 'Fetching Problems Failed', operation, context)
       throw error
     }
   }

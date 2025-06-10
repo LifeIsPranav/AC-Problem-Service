@@ -52,12 +52,21 @@ class ProblemService {
 
 
   async getProblem(id) {
+    const operation = 'getProblem'
     try {
+      logInfo("Fetching Problem", operation, context)
       const problem = await this.problemRepository.getProblem(id)
-      if(!problem) throw new NotFound()
+
+      if(!problem){ 
+        logWarn('Problem Data is Empty: No Such Problem Exists', operation, context, {problemId: id})
+        throw new NotFound()
+      }
+
+      logInfo('Fetched Problem Successfully', operation, context)
       return problem
 
     } catch (error) {
+      logError(error, 'Error Fetching Problem', operation, context, {problemId: id})
       throw error
     }
   }

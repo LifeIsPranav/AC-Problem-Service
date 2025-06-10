@@ -11,7 +11,7 @@ class ProblemRepository {
   async createProblem(problemData) {
     const operation = 'createProblem'
     try {
-      logDebug('Starting problem creation in Repository', operation, context, problemData)
+      logDebug('Starting problem creation in Repository', operation, context)
 
       if(!problemData.title) {
         logWarn('Title Not provided', operation, context, problemData)
@@ -59,10 +59,10 @@ class ProblemRepository {
   async getProblem(id) {
     const operation = 'getProblem'
     try {
-      logDebug('Fetching Problem from the DB', operation, context, {ProblemId: id})
+      logDebug('Fetching Problem from the DB', operation, context)
       const problem =  await Problem.findById(id)
 
-      logDebug('Fetched Problem Successfully', operation, context, {data: problem})
+      logDebug('Fetched Problem Successfully', operation, context, {problemId: id})
       return problem
 
     } catch (error) {

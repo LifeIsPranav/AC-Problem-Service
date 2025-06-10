@@ -33,11 +33,29 @@ function logEvent(level, message, operation, context, additionalData = {}, error
   logger[level](message, metadata)
 }
 
+
+
 function logError(error, message, operation, context, additionalData) {
   logEvent('error', message, operation, context, additionalData, error)
 }
 
+function logInfo(message, operation, context, additionalData) {
+  logEvent('info', message, operation, context, additionalData)
+}
+
+function logDebug(message, operation, context, additionalData) {
+  logEvent('debug', message, operation, context, additionalData)
+}
+
+function logWarn(message, operation, context, additionalData) {
+  logEvent('warn', message, operation, context, additionalData)
+}
+
+
 module.exports = {
   logEvent,
-  logError
+  logError,
+  logWarn,
+  logInfo,
+  logDebug
 }

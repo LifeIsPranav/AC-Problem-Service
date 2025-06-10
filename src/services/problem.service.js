@@ -2,7 +2,7 @@ const logger = require("../config/logger.config")
 const BadRequest = require("../errors/clientSide/badRequest.error")
 const NotFound = require("../errors/clientSide/notFound.error")
 const { markdownSanitizer } = require("../utils")
-const { logEvent, logError } = require("../utils/logger.utils")
+const { logError, logInfo, logWarn } = require("../utils/logger.utils")
 const { service: context } = require('../config/context.config')
 
 
@@ -15,17 +15,17 @@ class ProblemService {
   async createProblem(problemData) {
     const operation = 'createProblem'
     try {
-      logEvent("info", "Creating New Problem", operation, context)
+      logInfo("Creating New Problem", operation, context)
 
       if(!problemData.description) {
-        logEvent("warn", "Missing Description", operation, context)
+        logWarn("Missing Description", operation, context)
         throw new BadRequest("description", "Please Provide a Description to the Problem")
       }
 
       problemData.description = markdownSanitizer(problemData.description)
       const problem = await this.problemRepository.createProblem(problemData)
       
-      logEvent("info", "Created Successfully", operation, context, { problemId: problem._id })
+      logInfo("Created Successfully", operation, context, { problemId: problem._id })
       return problem
 
     } catch (error) {
@@ -38,10 +38,10 @@ class ProblemService {
   async getAllProblems() {
     const operation = 'getAllProblems'
     try {
-      logEvent("info", "Fetching All Problems", operation, context)
+      logInfo("Fetching All Problems", operation, context)
       const problems =  await this.problemRepository.getAllProblems()
 
-      logEvent("info", "Fetched All Problems", operation, context)
+      logInfo("Fetched All Problems", operation, context)
       return problems
 
     } catch (error) {

@@ -2,7 +2,7 @@
 const logger = require("../config/logger.config");
 const BadRequest = require("../errors/clientSide/badRequest.error");
 const { Problem } = require("../models");
-const { logEvent, logError } = require("../utils/logger.utils");
+const { logError, logDebug, logWarn } = require("../utils/logger.utils");
 
 const { repository: context } = require('../config/context.config')
 
@@ -11,14 +11,14 @@ class ProblemRepository {
   async createProblem(problemData) {
     const operation = 'createProblem'
     try {
-      logEvent('debug', 'Starting problem creation in Repository', operation, context, problemData)
+      logDebug('Starting problem creation in Repository', operation, context, problemData)
 
       if(!problemData.title) {
-        logEvent('warn', 'Title Not provided', operation, context)
+        logWarn('Title Not provided', operation, context, problemData)
         throw new BadRequest("Title", "Provide a Title")
       }
       if(!problemData.description) {
-        logEvent('warn', 'Description Not provided', operation, context)
+        logWarn('Description Not provided', operation, context, problemData)
         throw new BadRequest("Description", "Provide a Description")
       }
 
@@ -30,7 +30,7 @@ class ProblemRepository {
         editorial: problemData.editorial ?? undefined
       })
 
-      logEvent('debug', 'Problem created in Repository', operation, context, problemData)
+      logDebug('Problem created in Repository', operation, context, problemData)
       return problem
 
     } catch(error) {
@@ -43,10 +43,10 @@ class ProblemRepository {
   async getAllProblems() {
     const operation = 'getAllProblems'
     try {
-      logEvent('debug', 'Starting to Fetch All Problems in Repository', operation, context)
+      logDebug('Starting to Fetch All Problems in Repository', operation, context)
       const problems = await Problem.find({})
 
-      logEvent('debug', 'Fetched All Problems Successfully', operation, context)
+      logDebug('Fetched All Problems Successfully', operation, context)
       return problems
 
     } catch (error) {
@@ -59,12 +59,14 @@ class ProblemRepository {
   async getProblem(id) {
     const operation = 'getProblem'
     try {
-      logEvent('debug', 'Fetching Problem from the DB', operation, context, {id})
+      logDebug('Fetching Problem from the DB', operation, context, {ProblemId: id})
       const problem =  await Problem.findById(id)
 
+      logDebug('Fetched Problem Successfully', operation, context, {data: problem})
       return problem
 
     } catch (error) {
+      logError(error, 'Unable to Fetch Problem', operation, context, {errorMessage: error.message})
       throw error
     }
   }

@@ -9,7 +9,6 @@ class ProblemRepository {
 
   async createProblem(problemData) {
     try {
-
       logEvent('debug', 'Starting problem creation in Repository', "createProblem", "repository", problemData)
 
       if(!problemData.title) {
@@ -33,6 +32,7 @@ class ProblemRepository {
       return problem
 
     } catch(error) {
+      logEvent('error', 'Problem Creation Failed', 'createProblem', 'repository', {attemptedData: problemData}, error)
       throw error
     }
   }

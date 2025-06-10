@@ -8,18 +8,29 @@ const logger = require("../config/logger.config");
  * @param {string} context - Context (service/repository)
  * @param {object} [additionalData] - Additional metadata
  */
-function logEvent(level, message, operation, context, additionalData = {}) {
+function logEvent(level, message, operation, context, additionalData = {}, error = null) {
     // Create metadata object with only additional data
     const metadata = {
         ...additionalData
-    };
+    }
+
+
+    if(error) {
+      metadata.error = {
+        type: error.name || 'Error',
+        message: error.message,
+        stack: error.stack,
+        code: error.code,
+        ...error
+      }
+    }
     
     // Set operation and context as properties on the logger
-    logger.operation = operation;
-    logger.context = context;
+    logger.operation = operation
+    logger.context = context
     
     // Call logger with proper format
-    logger[level](message, metadata);
+    logger[level](message, metadata)
 }
 
 module.exports = logEvent

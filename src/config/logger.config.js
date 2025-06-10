@@ -35,7 +35,7 @@ allowedTransports.push(new winston.transports.Console({
 allowedTransports.push(new winston.transports.MongoDB({
   db: LOG_DB_URL,
   collection: 'logs',
-  // level: 'error',
+  level: 'error',
   format: winston.format.combine(
     winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
     winston.format.json()

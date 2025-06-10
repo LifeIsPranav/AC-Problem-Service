@@ -11,7 +11,7 @@ class ProblemRepository {
   async createProblem(problemData) {
     const operation = 'createProblem'
     try {
-      logDebug('Starting problem creation in Repository', operation, context)
+      logDebug('Starting problem creation in DB', operation, context)
 
       if(!problemData.title) {
         logWarn('Title Not provided', operation, context, problemData)
@@ -30,7 +30,7 @@ class ProblemRepository {
         editorial: problemData.editorial ?? undefined
       })
 
-      logDebug('Problem created in Repository', operation, context, problemData)
+      logDebug('Finished Creating a new Problem', operation, context, problemData)
       return problem
 
     } catch(error) {
@@ -43,10 +43,10 @@ class ProblemRepository {
   async getAllProblems() {
     const operation = 'getAllProblems'
     try {
-      logDebug('Starting to Fetch All Problems in Repository', operation, context)
+      logDebug('Starting to Fetch All Problems from DB', operation, context)
       const problems = await Problem.find({})
 
-      logDebug('Fetched All Problems Successfully', operation, context)
+      logDebug('Finished Fetching All Problems', operation, context)
       return problems
 
     } catch (error) {
@@ -59,10 +59,10 @@ class ProblemRepository {
   async getProblem(id) {
     const operation = 'getProblem'
     try {
-      logDebug('Fetching Problem from the DB', operation, context)
+      logDebug('Starting to Fetch Problem from DB', operation, context)
       const problem =  await Problem.findById(id)
 
-      logDebug('Fetched Problem Successfully', operation, context, {problemId: id})
+      logDebug('Finished Fetching Problem', operation, context, {problemId: id})
       return problem
 
     } catch (error) {
@@ -75,10 +75,10 @@ class ProblemRepository {
   async deleteProblem(id) {
     const operation = 'deleteProblem'
     try {
-      logDebug('Deleting Problem from the DB', operation, context)
+      logDebug('Starting to Delete Problem from DB', operation, context)
       const problem = await Problem.findByIdAndDelete(id)
 
-      logDebug('Operation Performed on DB Successfully', operation, context, {data: problem})
+      logDebug('Finished Deleting Problem', operation, context, {data: problem})
       return problem
 
     } catch (error) {
@@ -90,7 +90,9 @@ class ProblemRepository {
 
   async updateProblem(id, details) {
     const operation = 'updateProblem'
+
     try {
+      logDebug('Starting to Update Problem in DB', operation, context)
       const updatedProblem = await Problem.findByIdAndUpdate(id, {
         ...(details.title && { title: details.title }),
         ...(details.description && { description: details.description }),
@@ -100,9 +102,11 @@ class ProblemRepository {
       },
       {new: true, runValidators: true})
 
+      logDebug('Finished Updating Problem in DB', operation, context)
       return updatedProblem
 
     } catch (error) {
+      logError(error, 'Error Updating Problem', operation, context, {problemId: id, detailsReceived: details})
       throw error
     }
   }

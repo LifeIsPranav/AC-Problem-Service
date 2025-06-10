@@ -21,6 +21,7 @@ class ProblemService {
         throw new BadRequest("description", "Please Provide a Description to the Problem")
       }
 
+      if(problemData.editorial) problemData.editorial = markdownSanitizer(problemData.editorial)
       problemData.description = markdownSanitizer(problemData.description)
       const problem = await this.problemRepository.createProblem(problemData)
       
@@ -94,12 +95,25 @@ class ProblemService {
   async updateProblem(id, details) {
     const operation = 'updateProblem'
     try {
-      const updatedProblem = await this.problemRepository.updateProblem(id, details)
-      if(!updatedProblem) throw new NotFound()
+      if(details.description)
+      details.description = markdownSanitizer(problemData.description)
+    
+      if(details.editorial)
+      details.editorial = markdownSanitizer(problemData.editorial)
 
+      logInfo('Updating Problem', operation, context)
+      const updatedProblem = await this.problemRepository.updateProblem(id, details)
+
+      if(!updatedProblem) {
+        logWarn('Error Updating Problem: No Such problem found', operation, context, {problemId: id})
+        throw new NotFound()
+      }
+
+      logInfo('Updated Problem Successfully', operation, context)
       return updatedProblem
 
     } catch (error) {
+      logError(error, 'Error Updating Problem', operation, context, {problemId: id, detailsReceived: details})
       throw error
     }
   }

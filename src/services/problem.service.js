@@ -95,6 +95,11 @@ class ProblemService {
   async updateProblem(id, details) {
     const operation = 'updateProblem'
     try {
+      if(Object.keys(details).length === 0) {
+        logWarn('No Details Provided for Updating Problem', operation, context, {problemId: id, detailsReceived: details})
+        throw new BadRequest('details', 'Please Provide Adequate Details to Update the Problem')
+      }
+
       if(details.description)
       details.description = markdownSanitizer(problemData.description)
     
